@@ -9,11 +9,21 @@ class Layout extends Component {
       albums: [],
     }
   }
+
+  componentWillMount(){
+    fetch('https://jsonplaceholder.typicode.com/albums')
+      .then(response => response.json())
+      .then(data => 
+        this.setState({
+          albums: data,
+        })
+      );
+  }
  
   render(){
     return(
       <div>
-        <Album title="Lorem" userId="1" id="5" />
+        { this.state.albums.map(item => <Album key={item.id} {...item} /> )}
       </div>
     );
   }
