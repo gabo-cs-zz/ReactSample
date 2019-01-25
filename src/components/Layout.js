@@ -3,7 +3,7 @@ import React, { Component } from 'react'
 import Album from './Album'
 
 const dropDown = {
-  display: 'block'
+  display: 'block',
 }
 
 class Layout extends Component {
@@ -14,7 +14,7 @@ class Layout extends Component {
     }
   }
 
-  componentWillMount(){
+  componentDidMount(){
     fetch('https://jsonplaceholder.typicode.com/albums')
       .then(response => response.json())
       .then(data => 
@@ -35,15 +35,30 @@ class Layout extends Component {
     return ids;
   }
  
+  onFilter = () => {
+    console.log(this.refs.sele.value);
+  }
+
   render(){
-    return(
-      <div>
-        <select style={dropDown}>
-          { this.state.albums.length > 0 && this.getIds().map(item => <option key={item}> {item} </option> ) }
-        </select>
-        { this.state.albums.map(item => <Album key={item.id} {...item} /> )}
-      </div>
-    );
+    if (this.state.albums.length > 0){
+      return(
+        <div id="layout-container">
+          <div style={dropDown}>
+            <select ref='sele'>
+              {
+                this.getIds().map( item => (
+                  <option key={item} value={item}> {item} </option>
+                ))
+              }
+            </select>
+            <button onClick={this.onFilter}> FILTER </button>
+          </div>
+          { this.state.albums.map(item => <Album key={item.id} {...item} /> )}
+        </div>
+      );
+    } else {
+      return <div>No items found.</div>
+    }
   }
 
 }
